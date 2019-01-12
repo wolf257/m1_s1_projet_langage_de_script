@@ -18,8 +18,8 @@ champsOusseynou = champs.champsOusseynou
 champsAndrea = champs.champsAndrea
 champsLucia = champs.champsLucia
 
+
 def selection_des_etablissements_pertinents():
-    # pass
 
     with open(fic0, mode='r', encoding='utf8') as filein:
         # fic OG : (idEtabl, annee, idDept)
@@ -32,11 +32,10 @@ def selection_des_etablissements_pertinents():
             infoEtabl0.append((idEtabl, annee, idDept))
         # infoEtabl0 = [(idEtabl, annee, idDept) for line in fic0]
 
-        print(f"Nbre tuple OG: {len(infoEtabl0)}")
-
+        print(f"Nbre triplets Ousseynou (idEtabl, annee, idDept): {len(infoEtabl0)}")
 
     with open(fic1, mode='r', encoding='utf8') as filein:
-    # fic andrea : (idEtabl, annee)
+        # fic andrea : (idEtabl, annee)
         infoEtabl1 = []
         for line in filein:
             idEtabl = (line.split(';')[1].strip())
@@ -45,13 +44,13 @@ def selection_des_etablissements_pertinents():
 
             infoEtabl1.append((idEtabl, annee))
 
-        print(f"Nbre Etabl Andrea: {len(infoEtabl1)}")
+        print(f"Nbre tuple Andrea (idEtabl, annee): {len(infoEtabl1)}")
         # pprint.pprint(idEtabl1)
 
     with open(fic2, mode='r', encoding='utf8') as filein:
-    # fic lucia : idDept
+        # fic lucia : idDept
         idDept2 = set([line.split(',')[0].strip() for line in filein])
-        print(f"Nbre Dept Lucia (set): {len(idDept2)}")
+        print(f"Nbre département Lucia (idDept): {len(idDept2)}")
 
     # =================================================
 
@@ -67,8 +66,8 @@ def selection_des_etablissements_pertinents():
             listeEtablRetenue.append((idEtabl, annee))
             listeDeptRetenue.add(idDept)
 
-    print(f"Nbre d'établissement retenus (og - Andrea) : {len(listeEtablRetenue)}")
-    print(f"Nbre de départements retenus (og - Lucia): {len(listeDeptRetenue)}")
+    print(f"Nbre d'établissement retenus (Andrea - Ousseynou) : {len(listeEtablRetenue)}")
+    print(f"Nbre de départements retenus (Lucia - Ousseynou): {len(listeDeptRetenue)}")
 
     return listeEtablRetenue, listeDeptRetenue
 
@@ -130,6 +129,7 @@ def remplissage_dico_donnees(listeEtablRetenue, listeDeptRetenue):
 
     return dicoDonneesEtablissements, dicoDonneesDepartements
 
+
 def generation_fichier_final(dicoDonneesEtablissements, dicoDonneesDepartements):
 
     f = csv.writer(open(ficFinal, "w+"))
@@ -159,7 +159,7 @@ def generation_fichier_final(dicoDonneesEtablissements, dicoDonneesDepartements)
 
         f.writerow(datas)
 
-    print(f"Les données ont été écrites dans le fichier : {ficFinal.split('/')[-1]}")
+    print(f"Les données ont été écrites dans le fichier : {ficFinal.split('/')[-1]} \n")
 
 
 if __name__ == '__main__':

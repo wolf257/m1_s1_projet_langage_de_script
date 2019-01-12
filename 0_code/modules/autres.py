@@ -12,7 +12,7 @@ def generation_arborescence():
     for folder in folders:
 
         if os.path.exists(f"../{folder}/"):
-            print(f'- Dossier {folder}/ déjà existant')
+            print(f'- Dossier {folder}/ déjà existant.')
         else:
             print(f"- Création du dossier : {folder}")
             try:
