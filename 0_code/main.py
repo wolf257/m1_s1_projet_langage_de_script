@@ -23,8 +23,6 @@ def main():
     print(f"\n======= 2: PHASE DE TRAVAIL SUR LES DONNEES =======\n")
     listeEtabl, listeDept = production_finale.selection_des_etablissements_pertinents()
 
-    # print(f"{len(listeEtabl)}, {len(listeDept)}")
-
     dicoEtablissements, dicoDepartements = production_finale.remplissage_dico_donnees(listeEtabl, listeDept)
 
     print(f"\n======= 3: PHASE DE PRODUCTION FINALE =======\n")

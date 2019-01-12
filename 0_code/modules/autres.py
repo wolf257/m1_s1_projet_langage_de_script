@@ -2,11 +2,16 @@
 # -*- coding : utf8 -*-
 
 import os
-##############################################################
-# Fonction : generation_arborescence()
-##############################################################
+
 
 def generation_arborescence():
+    """
+        Cette fonction vérifie que nous ayons l'arborescence
+        dont on aura besoin.
+        Si elle existe, elle ne fait rien.
+        Sinon, elle la crée.
+    """
+
     folders = ['2_resultats_intermediaires', '3_resultats_finaux']
 
     for folder in folders:

@@ -33,10 +33,10 @@ def generation_tableau_intermediaire_sur_demographie():
         # TEST :
         # print(f"****** Traitement année : {annee} *******")
 
-        # On l'ouvre
         with open(fic, mode='r', encoding='utf8') as filein:
 
             # On skippe les 4 premieres lignes (0 à 3)
+            # Elle correspondance à d'autres infos.
             for x in range(4):
                 next(filein)
 
@@ -110,17 +110,13 @@ def filtered_csv_generator(file_name, new_file, sep, headers):
 
 def generation_tableau_intermediaire_sur_insertionPro():
 
-    # headers = ['annee', 'numero_de_l_etablissement', 'domaine', 'discipline',
-    #            'taux_dinsertion', 'emplois_stables', 'salaire_brut_annuel_estime',
-    #            'taux_de_chomage_regional', 'salaire_net_mensuel_median_regional']
-
     filtered_csv_generator(ficSourceInsertion, ficIntermedInsertion, ';', champsAndrea)
 
     print(f"-  Le fichier '{ficIntermedInsertion.split('/')[-1]}' a été créé et rempli. ")
 
 
 def get_datas_from_api(champsOusseynou):
-    """docstring for get_datas_from_api"""
+    """ docstring for get_datas_from_api """
 
     site = 'https://data.enseignementsup-recherche.gouv.fr/'
     api = 'api/records/1.0/search/'
@@ -145,7 +141,7 @@ def get_datas_from_api(champsOusseynou):
 
 
 def transform_json_to_csv(myrequest, listChamps, ficSortie):
-    """docstring for transform_json_to_csv"""
+    """ docstring for transform_json_to_csv """
 
     myjson = json.loads(myrequest.text)
 
@@ -157,6 +153,7 @@ def transform_json_to_csv(myrequest, listChamps, ficSortie):
     f.writerow(listNoms)
 
     for elt in myjson['records']:
+        # filtrage des années, et écriture des lignes.
         if (2010 <= int(elt['fields'].get('rentree', 0)) <= 2015):
             datas = [elt['fields'].get(arg, 'na') for arg in listClef]
             f.writerow(datas)
@@ -165,7 +162,9 @@ def transform_json_to_csv(myrequest, listChamps, ficSortie):
 
 
 def generation_tableau_intermediaire_sur_Univ():
-    """docstring for main"""
+    """
+    docstring generation_tableau_intermediaire_sur_Univ()
+    """
 
     myrequest, listChamps = get_datas_from_api(champsOusseynou)
 

@@ -30,17 +30,15 @@ def selection_des_etablissements_pertinents():
             idDept = line.split(',')[9].strip()
 
             infoEtabl0.append((idEtabl, annee, idDept))
-        # infoEtabl0 = [(idEtabl, annee, idDept) for line in fic0]
 
         print(f"Nbre triplets Ousseynou (idEtabl, annee, idDept): {len(infoEtabl0)}")
 
     with open(fic1, mode='r', encoding='utf8') as filein:
-        # fic andrea : (idEtabl, annee)
+        # fic Andrea : (idEtabl, annee)
         infoEtabl1 = []
         for line in filein:
             idEtabl = (line.split(';')[1].strip())
             annee = (line.split(';')[0].strip())
-            # print(f"{idEtabl1}, {annee}")
 
             infoEtabl1.append((idEtabl, annee))
 
@@ -48,7 +46,7 @@ def selection_des_etablissements_pertinents():
         # pprint.pprint(idEtabl1)
 
     with open(fic2, mode='r', encoding='utf8') as filein:
-        # fic lucia : idDept
+        # fic Lucia : idDept
         idDept2 = set([line.split(',')[0].strip() for line in filein])
         print(f"Nbre département Lucia (idDept): {len(idDept2)}")
 
@@ -62,6 +60,8 @@ def selection_des_etablissements_pertinents():
         annee = couple[1]
         idDept = couple[2]
 
+        # On ne retient que les éléments permettant la jonction
+        # entre les 3 tables
         if ((idEtabl, annee) in infoEtabl1) and (idDept in idDept2):
             listeEtablRetenue.append((idEtabl, annee))
             listeDeptRetenue.add(idDept)
@@ -85,7 +85,7 @@ def remplissage_dico_donnees(listeEtablRetenue, listeDeptRetenue):
             if (idEtabl, annee) in listeEtablRetenue:
                 dicoDonneesEtablissements.setdefault((idEtabl, annee), {})
 
-                # remplissage des infos de filein sur école
+                # remplissage des infos de filein sur établissement
                 for index, champs in enumerate(champsOusseynou):
                     idChamp = champs[0]
                     dicoDonneesEtablissements[(idEtabl, annee)][idChamp] = line.split(',')[index].strip()
@@ -103,6 +103,8 @@ def remplissage_dico_donnees(listeEtablRetenue, listeDeptRetenue):
                 for index, champs in enumerate(champsAndrea):
                     idChamp = champs.strip()
 
+                    # on ne veut juste par avoir deux fois la même
+                    # informations dans notre fichier final.
                     if (idChamp == 'numero_de_l_etablissement' or idChamp == 'annee'):
                         continue
 
@@ -140,10 +142,10 @@ def generation_fichier_final(dicoDonneesEtablissements, dicoDonneesDepartements)
 
     listChamps2 = [elt for elt in champsAndrea if not (elt == 'numero_de_l_etablissement' or elt == 'annee')]
 
+    listSousTotal = listChamps1 + listChamps2
+
     listChamps3 = [elt[0] for elt in champsLucia]
     listChamps3Nommes = [elt[1] for elt in champsLucia]
-
-    listSousTotal = listChamps1 + listChamps2
 
     listTotal = listChamps1Nommes + listChamps2 + listChamps3Nommes
 
@@ -153,10 +155,13 @@ def generation_fichier_final(dicoDonneesEtablissements, dicoDonneesDepartements)
     for elt in dicoDonneesEtablissements.keys():
         idDept = dicoDonneesEtablissements[elt]['dep_etab_lib'].strip()
 
+        # on récupére les infos des 2 dictionnaires précédemment remplis
         datas0 = [dicoDonneesEtablissements[elt].get(arg, 'na') for arg in listSousTotal]
         datas1 = [dicoDonneesDepartements[idDept].get(arg, 'na') for arg in listChamps3]
+
         datas = datas0 + datas1
 
+        # remplissage
         f.writerow(datas)
 
     print(f"Les données ont été écrites dans le fichier : {ficFinal.split('/')[-1]} \n")
