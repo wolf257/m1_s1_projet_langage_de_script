@@ -4,7 +4,6 @@
 import pprint
 import csv
 
-from modules import requetes_api
 from modules import collecte_donnees
 from modules import production_finale
 from modules import autres
